@@ -13,8 +13,7 @@ Auto-generated skill from MCP server
 - **[Variables](#variables)** (11 tools) - Variable and variable set management
 - **[Workspaces](#workspaces)** (4 tools) - Workspace creation, configuration, and management
 - **[Tags](#tags)** (3 tools) - Workspace tagging operations
-- **[Other](#other)** (2 tools) - Additional tools
-- **[Public Registry](#public-registry)** (7 tools) - Tools for accessing public Terraform registry (modules, providers, policies)
+- **[Public Registry](#public-registry)** (9 tools) - Tools for accessing public Terraform registry (modules, providers, policies)
 - **[Private Registry](#private-registry)** (4 tools) - Tools for accessing private Terraform modules and providers
 - **[Runs](#runs)** (1 tools) - Terraform run creation and monitoring
 - **[Organization](#organization)** (2 tools) - Organization and project listing
@@ -425,11 +424,11 @@ Read all tags from a Terraform workspace.
 
 **Import:** `import { ReadWorkspaceTagsInput } from "./scripts/tags/types.js"`
 
-## Other
+## Public Registry
 
-Additional tools
+Tools for accessing public Terraform registry (modules, providers, policies)
 
-**Location:** `scripts/other/`
+**Location:** `scripts/public-registry/`
 
 ### get_latest_module_version
 
@@ -446,7 +445,7 @@ Fetches the latest version of a Terraform module from the public registry
 
 **TypeScript Interface:** `GetLatestModuleVersionInput`
 
-**Import:** `import { GetLatestModuleVersionInput } from "./scripts/other/types.js"`
+**Import:** `import { GetLatestModuleVersionInput } from "./scripts/public-registry/types.js"`
 
 ### get_latest_provider_version
 
@@ -461,13 +460,7 @@ Fetches the latest version of a Terraform provider from the public registry
 
 **TypeScript Interface:** `GetLatestProviderVersionInput`
 
-**Import:** `import { GetLatestProviderVersionInput } from "./scripts/other/types.js"`
-
-## Public Registry
-
-Tools for accessing public Terraform registry (modules, providers, policies)
-
-**Location:** `scripts/public-registry/`
+**Import:** `import { GetLatestProviderVersionInput } from "./scripts/public-registry/types.js"`
 
 ### get_module_details
 
