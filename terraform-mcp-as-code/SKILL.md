@@ -26,13 +26,12 @@ docker run -i --rm -e TFE_TOKEN=your_token hashicorp/terraform-mcp-server
 
 ## Quick Start
 
-### 1. Initialize the MCP Client
-
-Before using any tools, initialize the MCP client connection:
-
 ```typescript
-import { initializeMCPClient } from "./scripts/client.js";
+import { initializeMCPClient, closeMCPClient } from "./scripts/client.js";
+import { CreateWorkspace } from "./scripts/workspaces/index.js";
+import { CreateRun } from "./scripts/runs/index.js";
 
+// 1. Initialize connection
 await initializeMCPClient({
   command: "docker",
   args: [
@@ -41,39 +40,25 @@ await initializeMCPClient({
     "hashicorp/terraform-mcp-server"
   ]
 });
-```
 
-### 2. Use Type-Safe Wrappers
+try {
+  // 2. Create a workspace
+  const workspace = await CreateWorkspace({
+    workspace_name: "my-infrastructure",
+    terraform_org_name: "my-org",
+    auto_apply: "false"
+  });
 
-Import and call wrapper functions with full type safety:
-
-```typescript
-import { CreateWorkspace } from "./scripts/workspaces/index.js";
-import { CreateRun } from "./scripts/runs/index.js";
-
-// Create a workspace
-const workspace = await CreateWorkspace({
-  workspace_name: "my-infrastructure",
-  terraform_org_name: "my-org",
-  auto_apply: "false"
-});
-
-// Trigger a run
-const run = await CreateRun({
-  workspace_name: "my-infrastructure",
-  terraform_org_name: "my-org",
-  message: "Initial deployment"
-});
-```
-
-### 3. Clean Up
-
-Close the MCP client when done:
-
-```typescript
-import { closeMCPClient } from "./scripts/client.js";
-
-await closeMCPClient();
+  // 3. Trigger a run
+  const run = await CreateRun({
+    workspace_name: "my-infrastructure",
+    terraform_org_name: "my-org",
+    message: "Initial deployment"
+  });
+} finally {
+  // 4. Clean up
+  await closeMCPClient();
+}
 ```
 
 ## Tool Categories
