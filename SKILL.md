@@ -1,14 +1,16 @@
 # MCP to Claude Skill Converter
 
-Convert Model Context Protocol (MCP) servers into Claude Code skills with TypeScript interfaces.
+Convert Model Context Protocol (MCP) servers into production-ready Claude Code skills with full TypeScript support.
 
 ## Overview
 
 This skill enables you to automatically generate Claude Code skills from any MCP server. It connects to a running MCP server, introspects its available tools, and generates:
 
-- TypeScript interfaces for all tool inputs
-- A complete SKILL.md file documenting all tools
-- A ready-to-use skill package
+- **TypeScript wrapper functions** with type-safe interfaces for all tool inputs/outputs
+- **MCP client integration** following Anthropic's recommended patterns
+- **Category-organized structure** with barrel exports for easy importing
+- **Complete SKILL.md documentation** with usage examples and API reference
+- **Ready-to-use skill package** with working MCP integration
 
 ## Usage Workflow
 
