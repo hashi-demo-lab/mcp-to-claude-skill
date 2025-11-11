@@ -1,0 +1,30 @@
+{
+  "name": "mcp-to-claude-skill",
+  "version": "1.0.0",
+  "description": "Convert MCP server schemas to Claude Code skills with TypeScript interfaces",
+  "main": "dist/scripts/convert.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "convert": "npm run build && node dist/scripts/convert.js"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "claude",
+    "claude-code",
+    "skill",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "json-schema-to-typescript": "^15.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
+}
