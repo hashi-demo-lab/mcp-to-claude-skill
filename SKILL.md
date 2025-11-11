@@ -46,8 +46,10 @@ When you request a conversion, Claude will:
 3. **Run the converter**: Provide the server command and output directory
 4. **Connect to the MCP server** via stdio transport
 5. **Discover all tools** using the MCP `tools/list` protocol
-6. **Generate TypeScript interfaces** from JSON Schema definitions
-7. **Create the skill package** with SKILL.md, types, and documentation
+6. **Categorize tools** by logical groupings (workspaces, variables, etc.)
+7. **Generate TypeScript wrapper functions** with Input/Output interfaces from JSON Schema
+8. **Create MCP client helper** for connection management
+9. **Create the skill package** with SKILL.md, wrapper functions, and documentation
 
 ### 4. Output Structure
 
@@ -55,10 +57,20 @@ The generated skill will have this structure:
 
 ```
 <output-dir>/
-├── SKILL.md              # Main skill documentation
-├── README.md             # Installation instructions
+├── SKILL.md                      # Complete documentation with usage examples
+├── README.md                     # Installation and quick start guide
 └── scripts/
-    └── types.ts          # TypeScript interfaces for all tools
+    ├── client.ts                 # MCP client helper (initializeMCPClient, callMCPTool)
+    ├── workspaces/
+    │   ├── createWorkspace.ts    # Individual tool wrapper with types
+    │   ├── updateWorkspace.ts
+    │   ├── listWorkspaces.ts
+    │   └── index.ts              # Barrel export for category
+    ├── variables/
+    │   ├── createVariable.ts
+    │   ├── ...
+    │   └── index.ts
+    └── ... (other categories)
 ```
 
 ## Conversion Commands
