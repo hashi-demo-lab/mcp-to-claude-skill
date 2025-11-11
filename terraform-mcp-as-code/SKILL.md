@@ -11,8 +11,7 @@ Auto-generated skill from MCP server
 ## Tool Categories
 
 - **[Variables](#variables)** (11 tools) - Variable and variable set management
-- **[Workspaces](#workspaces)** (4 tools) - Workspace creation, configuration, and management
-- **[Tags](#tags)** (3 tools) - Workspace tagging operations
+- **[Workspaces](#workspaces)** (7 tools) - Workspace creation, configuration, and management
 - **[Public Registry](#public-registry)** (9 tools) - Tools for accessing public Terraform registry (modules, providers, policies)
 - **[Private Registry](#private-registry)** (4 tools) - Tools for accessing private Terraform modules and providers
 - **[Runs](#runs)** (1 tools) - Terraform run creation and monitoring
@@ -35,9 +34,9 @@ Attach a variable set to one or more workspaces.
 - `workspace_ids`: string (required)
   Comma-separated list of workspace IDs
 
-**TypeScript Interface:** `AttachVariableSetToWorkspacesInput`
+**TypeScript Wrapper:** `AttachVariableSetToWorkspaces`
 
-**Import:** `import { AttachVariableSetToWorkspacesInput } from "./scripts/variables/types.js"`
+**Import:** `import { AttachVariableSetToWorkspaces, AttachVariableSetToWorkspacesInput, AttachVariableSetToWorkspacesOutput } from "./scripts/variables/attachVariableSetToWorkspaces.js"`
 
 ### create_no_code_workspace
 
@@ -54,9 +53,9 @@ Creates a new Terraform No Code module workspace. The tool uses the MCP elicitat
 - `workspace_name`: string (required)
   The name of the workspace to create
 
-**TypeScript Interface:** `CreateNoCodeWorkspaceInput`
+**TypeScript Wrapper:** `CreateNoCodeWorkspace`
 
-**Import:** `import { CreateNoCodeWorkspaceInput } from "./scripts/variables/types.js"`
+**Import:** `import { CreateNoCodeWorkspace, CreateNoCodeWorkspaceInput, CreateNoCodeWorkspaceOutput } from "./scripts/variables/createNoCodeWorkspace.js"`
 
 ### create_variable_in_variable_set
 
@@ -79,9 +78,9 @@ Create a new variable in a variable set.
 - `variable_set_id`: string (required)
   Variable set ID
 
-**TypeScript Interface:** `CreateVariableInVariableSetInput`
+**TypeScript Wrapper:** `CreateVariableInVariableSet`
 
-**Import:** `import { CreateVariableInVariableSetInput } from "./scripts/variables/types.js"`
+**Import:** `import { CreateVariableInVariableSet, CreateVariableInVariableSetInput, CreateVariableInVariableSetOutput } from "./scripts/variables/createVariableInVariableSet.js"`
 
 ### create_variable_set
 
@@ -98,9 +97,9 @@ Create a new variable set in an organization.
 - `terraform_org_name`: string (required)
   Organization name
 
-**TypeScript Interface:** `CreateVariableSetInput`
+**TypeScript Wrapper:** `CreateVariableSet`
 
-**Import:** `import { CreateVariableSetInput } from "./scripts/variables/types.js"`
+**Import:** `import { CreateVariableSet, CreateVariableSetInput, CreateVariableSetOutput } from "./scripts/variables/createVariableSet.js"`
 
 ### create_workspace_variable
 
@@ -125,9 +124,9 @@ Create a new variable in a Terraform workspace.
 - `workspace_name`: string (required)
   Workspace name
 
-**TypeScript Interface:** `CreateWorkspaceVariableInput`
+**TypeScript Wrapper:** `CreateWorkspaceVariable`
 
-**Import:** `import { CreateWorkspaceVariableInput } from "./scripts/variables/types.js"`
+**Import:** `import { CreateWorkspaceVariable, CreateWorkspaceVariableInput, CreateWorkspaceVariableOutput } from "./scripts/variables/createWorkspaceVariable.js"`
 
 ### delete_variable_in_variable_set
 
@@ -140,9 +139,9 @@ Delete a variable in a variable set.
 - `variable_set_id`: string (required)
   Variable set ID
 
-**TypeScript Interface:** `DeleteVariableInVariableSetInput`
+**TypeScript Wrapper:** `DeleteVariableInVariableSet`
 
-**Import:** `import { DeleteVariableInVariableSetInput } from "./scripts/variables/types.js"`
+**Import:** `import { DeleteVariableInVariableSet, DeleteVariableInVariableSetInput, DeleteVariableInVariableSetOutput } from "./scripts/variables/deleteVariableInVariableSet.js"`
 
 ### detach_variable_set_from_workspaces
 
@@ -155,9 +154,9 @@ Detach a variable set from one or more workspaces.
 - `workspace_ids`: string (required)
   Comma-separated list of workspace IDs
 
-**TypeScript Interface:** `DetachVariableSetFromWorkspacesInput`
+**TypeScript Wrapper:** `DetachVariableSetFromWorkspaces`
 
-**Import:** `import { DetachVariableSetFromWorkspacesInput } from "./scripts/variables/types.js"`
+**Import:** `import { DetachVariableSetFromWorkspaces, DetachVariableSetFromWorkspacesInput, DetachVariableSetFromWorkspacesOutput } from "./scripts/variables/detachVariableSetFromWorkspaces.js"`
 
 ### get_workspace_details
 
@@ -170,9 +169,9 @@ Fetches detailed information about a specific Terraform workspace, including con
 - `workspace_name`: string (required)
   The name of the workspace to get details for
 
-**TypeScript Interface:** `GetWorkspaceDetailsInput`
+**TypeScript Wrapper:** `GetWorkspaceDetails`
 
-**Import:** `import { GetWorkspaceDetailsInput } from "./scripts/variables/types.js"`
+**Import:** `import { GetWorkspaceDetails, GetWorkspaceDetailsInput, GetWorkspaceDetailsOutput } from "./scripts/variables/getWorkspaceDetails.js"`
 
 ### list_variable_sets
 
@@ -189,9 +188,9 @@ List all variable sets in an organization. Returns all if query is empty.
 - `terraform_org_name`: string (required)
   Organization name
 
-**TypeScript Interface:** `ListVariableSetsInput`
+**TypeScript Wrapper:** `ListVariableSets`
 
-**Import:** `import { ListVariableSetsInput } from "./scripts/variables/types.js"`
+**Import:** `import { ListVariableSets, ListVariableSetsInput, ListVariableSetsOutput } from "./scripts/variables/listVariableSets.js"`
 
 ### list_workspace_variables
 
@@ -208,9 +207,9 @@ List all variables in a Terraform workspace. Returns all variables if query is e
 - `workspace_name`: string (required)
   Workspace name
 
-**TypeScript Interface:** `ListWorkspaceVariablesInput`
+**TypeScript Wrapper:** `ListWorkspaceVariables`
 
-**Import:** `import { ListWorkspaceVariablesInput } from "./scripts/variables/types.js"`
+**Import:** `import { ListWorkspaceVariables, ListWorkspaceVariablesInput, ListWorkspaceVariablesOutput } from "./scripts/variables/listWorkspaceVariables.js"`
 
 ### update_workspace_variable
 
@@ -235,9 +234,9 @@ Update an existing variable in a Terraform workspace.
 - `workspace_name`: string (required)
   Workspace name
 
-**TypeScript Interface:** `UpdateWorkspaceVariableInput`
+**TypeScript Wrapper:** `UpdateWorkspaceVariable`
 
-**Import:** `import { UpdateWorkspaceVariableInput } from "./scripts/variables/types.js"`
+**Import:** `import { UpdateWorkspaceVariable, UpdateWorkspaceVariableInput, UpdateWorkspaceVariableOutput } from "./scripts/variables/updateWorkspaceVariable.js"`
 
 ## Workspaces
 
@@ -260,9 +259,9 @@ Creates a new Terraform run in the specified workspace.
 - `workspace_name`: string (required)
   The name of the workspace to create a run in
 
-**TypeScript Interface:** `CreateRunInput`
+**TypeScript Wrapper:** `CreateRun`
 
-**Import:** `import { CreateRunInput } from "./scripts/workspaces/types.js"`
+**Import:** `import { CreateRun, CreateRunInput, CreateRunOutput } from "./scripts/workspaces/createRun.js"`
 
 ### create_workspace
 
@@ -295,9 +294,26 @@ Creates a new Terraform workspace in the specified organization. This is a destr
 - `workspace_name`: string (required)
   The name of the workspace to create
 
-**TypeScript Interface:** `CreateWorkspaceInput`
+**TypeScript Wrapper:** `CreateWorkspace`
 
-**Import:** `import { CreateWorkspaceInput } from "./scripts/workspaces/types.js"`
+**Import:** `import { CreateWorkspace, CreateWorkspaceInput, CreateWorkspaceOutput } from "./scripts/workspaces/createWorkspace.js"`
+
+### create_workspace_tags
+
+Add tags to a Terraform workspace.
+
+**Parameters:**
+
+- `tags`: string (required)
+  Comma-separated list of tag names to add, for key-value tags use key:value
+- `terraform_org_name`: string (required)
+  Organization name
+- `workspace_name`: string (required)
+  Workspace name
+
+**TypeScript Wrapper:** `CreateWorkspaceTags`
+
+**Import:** `import { CreateWorkspaceTags, CreateWorkspaceTagsInput, CreateWorkspaceTagsOutput } from "./scripts/workspaces/createWorkspaceTags.js"`
 
 ### list_runs
 
@@ -318,9 +334,51 @@ List or search Terraform runs in a specific workspace with optional filtering.
 - `workspace_name`: string (optional)
   If specified, lists the runs in the given workspace instead of the organization based on filters
 
-**TypeScript Interface:** `ListRunsInput`
+**TypeScript Wrapper:** `ListRuns`
 
-**Import:** `import { ListRunsInput } from "./scripts/workspaces/types.js"`
+**Import:** `import { ListRuns, ListRunsInput, ListRunsOutput } from "./scripts/workspaces/listRuns.js"`
+
+### list_workspaces
+
+Search and list Terraform workspaces within a specified organization. Returns all workspaces when no filters are applied, or filters results based on name patterns, tags, or search queries. Supports pagination for large result sets.
+
+**Parameters:**
+
+- `exclude_tags`: string (optional)
+  Optional comma-separated list of tags to exclude from results
+- `page`: number (optional)
+  Page number for pagination (min 1)
+- `pageSize`: number (optional)
+  Results per page for pagination (min 1, max 100)
+- `project_id`: string (optional)
+  Optional project ID to filter workspaces
+- `search_query`: string (optional)
+  Optional search query to filter workspaces by name
+- `tags`: string (optional)
+  Optional comma-separated list of tags to filter workspaces
+- `terraform_org_name`: string (required)
+  The Terraform organization name
+- `wildcard_name`: string (optional)
+  Optional wildcard pattern to match workspace names
+
+**TypeScript Wrapper:** `ListWorkspaces`
+
+**Import:** `import { ListWorkspaces, ListWorkspacesInput, ListWorkspacesOutput } from "./scripts/workspaces/listWorkspaces.js"`
+
+### read_workspace_tags
+
+Read all tags from a Terraform workspace.
+
+**Parameters:**
+
+- `terraform_org_name`: string (required)
+  Organization name
+- `workspace_name`: string (required)
+  Workspace name
+
+**TypeScript Wrapper:** `ReadWorkspaceTags`
+
+**Import:** `import { ReadWorkspaceTags, ReadWorkspaceTagsInput, ReadWorkspaceTagsOutput } from "./scripts/workspaces/readWorkspaceTags.js"`
 
 ### update_workspace
 
@@ -355,74 +413,9 @@ Updates an existing Terraform workspace configuration. This is a potentially des
 - `workspace_name`: string (required)
   The name of the workspace to update
 
-**TypeScript Interface:** `UpdateWorkspaceInput`
+**TypeScript Wrapper:** `UpdateWorkspace`
 
-**Import:** `import { UpdateWorkspaceInput } from "./scripts/workspaces/types.js"`
-
-## Tags
-
-Workspace tagging operations
-
-**Location:** `scripts/tags/`
-
-### create_workspace_tags
-
-Add tags to a Terraform workspace.
-
-**Parameters:**
-
-- `tags`: string (required)
-  Comma-separated list of tag names to add, for key-value tags use key:value
-- `terraform_org_name`: string (required)
-  Organization name
-- `workspace_name`: string (required)
-  Workspace name
-
-**TypeScript Interface:** `CreateWorkspaceTagsInput`
-
-**Import:** `import { CreateWorkspaceTagsInput } from "./scripts/tags/types.js"`
-
-### list_workspaces
-
-Search and list Terraform workspaces within a specified organization. Returns all workspaces when no filters are applied, or filters results based on name patterns, tags, or search queries. Supports pagination for large result sets.
-
-**Parameters:**
-
-- `exclude_tags`: string (optional)
-  Optional comma-separated list of tags to exclude from results
-- `page`: number (optional)
-  Page number for pagination (min 1)
-- `pageSize`: number (optional)
-  Results per page for pagination (min 1, max 100)
-- `project_id`: string (optional)
-  Optional project ID to filter workspaces
-- `search_query`: string (optional)
-  Optional search query to filter workspaces by name
-- `tags`: string (optional)
-  Optional comma-separated list of tags to filter workspaces
-- `terraform_org_name`: string (required)
-  The Terraform organization name
-- `wildcard_name`: string (optional)
-  Optional wildcard pattern to match workspace names
-
-**TypeScript Interface:** `ListWorkspacesInput`
-
-**Import:** `import { ListWorkspacesInput } from "./scripts/tags/types.js"`
-
-### read_workspace_tags
-
-Read all tags from a Terraform workspace.
-
-**Parameters:**
-
-- `terraform_org_name`: string (required)
-  Organization name
-- `workspace_name`: string (required)
-  Workspace name
-
-**TypeScript Interface:** `ReadWorkspaceTagsInput`
-
-**Import:** `import { ReadWorkspaceTagsInput } from "./scripts/tags/types.js"`
+**Import:** `import { UpdateWorkspace, UpdateWorkspaceInput, UpdateWorkspaceOutput } from "./scripts/workspaces/updateWorkspace.js"`
 
 ## Public Registry
 
@@ -443,9 +436,9 @@ Fetches the latest version of a Terraform module from the public registry
 - `module_publisher`: string (required)
   The publisher of the module, e.g., 'hashicorp', 'aws-ia', 'terraform-google-modules', 'Azure' etc.
 
-**TypeScript Interface:** `GetLatestModuleVersionInput`
+**TypeScript Wrapper:** `GetLatestModuleVersion`
 
-**Import:** `import { GetLatestModuleVersionInput } from "./scripts/public-registry/types.js"`
+**Import:** `import { GetLatestModuleVersion, GetLatestModuleVersionInput, GetLatestModuleVersionOutput } from "./scripts/public-registry/getLatestModuleVersion.js"`
 
 ### get_latest_provider_version
 
@@ -458,9 +451,9 @@ Fetches the latest version of a Terraform provider from the public registry
 - `namespace`: string (required)
   The namespace of the Terraform provider, typically the name of the company, or their GitHub organization name that created the provider e.g., 'hashicorp'
 
-**TypeScript Interface:** `GetLatestProviderVersionInput`
+**TypeScript Wrapper:** `GetLatestProviderVersion`
 
-**Import:** `import { GetLatestProviderVersionInput } from "./scripts/public-registry/types.js"`
+**Import:** `import { GetLatestProviderVersion, GetLatestProviderVersionInput, GetLatestProviderVersionOutput } from "./scripts/public-registry/getLatestProviderVersion.js"`
 
 ### get_module_details
 
@@ -471,9 +464,9 @@ Fetches up-to-date documentation on how to use a Terraform module. You must call
 - `module_id`: string (required)
   Exact valid and compatible module_id retrieved from search_modules (e.g., 'squareops/terraform-kubernetes-mongodb/mongodb/2.1.1', 'GoogleCloudPlatform/vertex-ai/google/0.2.0')
 
-**TypeScript Interface:** `GetModuleDetailsInput`
+**TypeScript Wrapper:** `GetModuleDetails`
 
-**Import:** `import { GetModuleDetailsInput } from "./scripts/public-registry/types.js"`
+**Import:** `import { GetModuleDetails, GetModuleDetailsInput, GetModuleDetailsOutput } from "./scripts/public-registry/getModuleDetails.js"`
 
 ### get_policy_details
 
@@ -484,9 +477,9 @@ Fetches up-to-date documentation for a specific policy from the Terraform regist
 - `terraform_policy_id`: string (required)
   Matching terraform_policy_id retrieved from the 'search_policies' tool (e.g., 'policies/hashicorp/CIS-Policy-Set-for-AWS-Terraform/1.0.1')
 
-**TypeScript Interface:** `GetPolicyDetailsInput`
+**TypeScript Wrapper:** `GetPolicyDetails`
 
-**Import:** `import { GetPolicyDetailsInput } from "./scripts/public-registry/types.js"`
+**Import:** `import { GetPolicyDetails, GetPolicyDetailsInput, GetPolicyDetailsOutput } from "./scripts/public-registry/getPolicyDetails.js"`
 
 ### get_provider_capabilities
 
@@ -511,9 +504,9 @@ Returns a summary with counts and examples for each capability type.
 - `version`: string (optional)
   The version of the provider to analyze (defaults to 'latest')
 
-**TypeScript Interface:** `GetProviderCapabilitiesInput`
+**TypeScript Wrapper:** `GetProviderCapabilities`
 
-**Import:** `import { GetProviderCapabilitiesInput } from "./scripts/public-registry/types.js"`
+**Import:** `import { GetProviderCapabilities, GetProviderCapabilitiesInput, GetProviderCapabilitiesOutput } from "./scripts/public-registry/getProviderCapabilities.js"`
 
 ### get_provider_details
 
@@ -525,9 +518,9 @@ You must call 'search_providers' tool first to obtain the exact tfprovider-compa
 - `provider_doc_id`: string (required)
   Exact tfprovider-compatible provider_doc_id, (e.g., '8894603', '8906901') retrieved from 'search_providers'
 
-**TypeScript Interface:** `GetProviderDetailsInput`
+**TypeScript Wrapper:** `GetProviderDetails`
 
-**Import:** `import { GetProviderDetailsInput } from "./scripts/public-registry/types.js"`
+**Import:** `import { GetProviderDetails, GetProviderDetailsInput, GetProviderDetailsOutput } from "./scripts/public-registry/getProviderDetails.js"`
 
 ### search_modules
 
@@ -548,9 +541,9 @@ If no modules were found, reattempt the search with a new moduleName query.
 - `module_query`: string (required)
   The query to search for Terraform modules.
 
-**TypeScript Interface:** `SearchModulesInput`
+**TypeScript Wrapper:** `SearchModules`
 
-**Import:** `import { SearchModulesInput } from "./scripts/public-registry/types.js"`
+**Import:** `import { SearchModules, SearchModulesInput, SearchModulesOutput } from "./scripts/public-registry/searchModules.js"`
 
 ### search_policies
 
@@ -570,9 +563,9 @@ If no policies were found, reattempt the search with a new policy_query.
 - `policy_query`: string (required)
   The query to search for Terraform modules.
 
-**TypeScript Interface:** `SearchPoliciesInput`
+**TypeScript Wrapper:** `SearchPolicies`
 
-**Import:** `import { SearchPoliciesInput } from "./scripts/public-registry/types.js"`
+**Import:** `import { SearchPolicies, SearchPoliciesInput, SearchPoliciesOutput } from "./scripts/public-registry/searchPolicies.js"`
 
 ### search_providers
 
@@ -603,9 +596,9 @@ for Terraform actions use 'actions'
 - `service_slug`: string (required)
   The slug of the service you want to deploy or read using the Terraform provider, prefer using a single word, use underscores for multiple words and if unsure about the service_slug, use the provider_name for its value
 
-**TypeScript Interface:** `SearchProvidersInput`
+**TypeScript Wrapper:** `SearchProviders`
 
-**Import:** `import { SearchProvidersInput } from "./scripts/public-registry/types.js"`
+**Import:** `import { SearchProviders, SearchProvidersInput, SearchProvidersOutput } from "./scripts/public-registry/searchProviders.js"`
 
 ## Private Registry
 
@@ -631,9 +624,9 @@ The module-namespace is usually the name of the Terraform organization. Obtain t
 - `terraform_org_name`: string (required)
   The Terraform Cloud/Enterprise organization name
 
-**TypeScript Interface:** `GetPrivateModuleDetailsInput`
+**TypeScript Wrapper:** `GetPrivateModuleDetails`
 
-**Import:** `import { GetPrivateModuleDetailsInput } from "./scripts/private-registry/types.js"`
+**Import:** `import { GetPrivateModuleDetails, GetPrivateModuleDetailsInput, GetPrivateModuleDetailsOutput } from "./scripts/private-registry/getPrivateModuleDetails.js"`
 
 ### get_private_provider_details
 
@@ -654,9 +647,9 @@ It provides details on how to use the provider, permissions, available versions,
 - `terraform_org_name`: string (required)
   The Terraform Cloud/Enterprise organization name
 
-**TypeScript Interface:** `GetPrivateProviderDetailsInput`
+**TypeScript Wrapper:** `GetPrivateProviderDetails`
 
-**Import:** `import { GetPrivateProviderDetailsInput } from "./scripts/private-registry/types.js"`
+**Import:** `import { GetPrivateProviderDetails, GetPrivateProviderDetailsInput, GetPrivateProviderDetailsOutput } from "./scripts/private-registry/getPrivateProviderDetails.js"`
 
 ### search_private_modules
 
@@ -674,9 +667,9 @@ It retrieves a list of private modules that match the search criteria. This tool
 - `terraform_org_name`: string (required)
   The Terraform Cloud/Enterprise organization name to search within
 
-**TypeScript Interface:** `SearchPrivateModulesInput`
+**TypeScript Wrapper:** `SearchPrivateModules`
 
-**Import:** `import { SearchPrivateModulesInput } from "./scripts/private-registry/types.js"`
+**Import:** `import { SearchPrivateModules, SearchPrivateModulesInput, SearchPrivateModulesOutput } from "./scripts/private-registry/searchPrivateModules.js"`
 
 ### search_private_providers
 
@@ -696,9 +689,9 @@ It retrieves a list of private providers that match the search criteria. This to
 - `terraform_org_name`: string (required)
   The Terraform Cloud/Enterprise organization name to search within
 
-**TypeScript Interface:** `SearchPrivateProvidersInput`
+**TypeScript Wrapper:** `SearchPrivateProviders`
 
-**Import:** `import { SearchPrivateProvidersInput } from "./scripts/private-registry/types.js"`
+**Import:** `import { SearchPrivateProviders, SearchPrivateProvidersInput, SearchPrivateProvidersOutput } from "./scripts/private-registry/searchPrivateProviders.js"`
 
 ## Runs
 
@@ -715,9 +708,9 @@ Fetches detailed information about a specific Terraform run.
 - `run_id`: string (required)
   The ID of the run to get details for
 
-**TypeScript Interface:** `GetRunDetailsInput`
+**TypeScript Wrapper:** `GetRunDetails`
 
-**Import:** `import { GetRunDetailsInput } from "./scripts/runs/types.js"`
+**Import:** `import { GetRunDetails, GetRunDetailsInput, GetRunDetailsOutput } from "./scripts/runs/getRunDetails.js"`
 
 ## Organization
 
@@ -736,9 +729,9 @@ Fetches a list of all Terraform organizations.
 - `pageSize`: number (optional)
   Results per page for pagination (min 1, max 100)
 
-**TypeScript Interface:** `ListTerraformOrgsInput`
+**TypeScript Wrapper:** `ListTerraformOrgs`
 
-**Import:** `import { ListTerraformOrgsInput } from "./scripts/organization/types.js"`
+**Import:** `import { ListTerraformOrgs, ListTerraformOrgsInput, ListTerraformOrgsOutput } from "./scripts/organization/listTerraformOrgs.js"`
 
 ### list_terraform_projects
 
@@ -753,23 +746,26 @@ Fetches a list of all Terraform projects.
 - `terraform_org_name`: string (required)
   The name of the Terraform organization to list projects for.
 
-**TypeScript Interface:** `ListTerraformProjectsInput`
+**TypeScript Wrapper:** `ListTerraformProjects`
 
-**Import:** `import { ListTerraformProjectsInput } from "./scripts/organization/types.js"`
+**Import:** `import { ListTerraformProjects, ListTerraformProjectsInput, ListTerraformProjectsOutput } from "./scripts/organization/listTerraformProjects.js"`
 
 ## Usage
 
-This skill provides TypeScript interfaces for all MCP tools.
-Import the interfaces from category-specific directories:
+This skill provides TypeScript wrapper functions and interfaces for all MCP tools.
+Import wrapper functions from category-specific modules:
 
 ```typescript
 // Example: Import from Variables
-import { AttachVariableSetToWorkspacesInput } from "./scripts/variables/types.js";
+import { AttachVariableSetToWorkspaces, AttachVariableSetToWorkspacesInput } from "./scripts/variables/attachVariableSetToWorkspaces.js";
 
-// Use the interface for type-safe tool calls
-const input: AttachVariableSetToWorkspacesInput = {
-  // ... parameters
-};
+// Or import from category index
+import { AttachVariableSetToWorkspaces } from "./scripts/variables/index.js";
+
+// Use type-safe wrapper function
+const result = await AttachVariableSetToWorkspaces({
+  // ... parameters with full type checking
+});
 ```
 
 ---

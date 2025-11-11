@@ -123,10 +123,11 @@ async function convert(options: ConversionOptions): Promise<void> {
     });
     console.log("");
 
-    // Step 5: Generate TypeScript interfaces
-    console.log("⚙️  Generating TypeScript interfaces...");
-    const typesContentMap = await generateCategorizedInterfaces(categories);
-    console.log(`✓ Generated interfaces for ${tools.length} tools in ${categories.length} categories`);
+    // Step 5: Generate TypeScript wrapper functions
+    console.log("⚙️  Generating TypeScript wrapper functions...");
+    const { generateCategorizedWrappers, generateCategoryIndex } = await import("./schema-parser.js");
+    const wrappersMap = await generateCategorizedWrappers(categories);
+    console.log(`✓ Generated wrapper functions for ${tools.length} tools in ${categories.length} categories`);
     console.log("");
 
     // Step 6: Create skill package
@@ -141,8 +142,8 @@ async function convert(options: ConversionOptions): Promise<void> {
     await createSkillPackage(
       options.outputDir,
       metadata,
-      tools,
-      typesContentMap
+      categories,
+      wrappersMap
     );
 
     console.log("");

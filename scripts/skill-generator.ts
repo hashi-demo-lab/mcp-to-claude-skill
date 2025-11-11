@@ -65,8 +65,8 @@ function categorizeTools(tools: MCPTool[]): ToolCategory[] {
       name: "Workspaces",
       directory: "workspaces",
       description: "Workspace creation, configuration, and management",
-      patterns: [/workspace/i],
-      exclude: [/variable/i, /tag/i]
+      patterns: [/workspace/i, /tag/i],
+      exclude: [/variable/i]
     },
     {
       name: "Runs",
@@ -80,12 +80,6 @@ function categorizeTools(tools: MCPTool[]): ToolCategory[] {
       directory: "variables",
       description: "Variable and variable set management",
       patterns: [/variable/i, /variable_set/i]
-    },
-    {
-      name: "Tags",
-      directory: "tags",
-      description: "Workspace tagging operations",
-      patterns: [/tag/i]
     },
     {
       name: "Organization",
@@ -227,14 +221,17 @@ export function generateSkillMarkdown(
         lines.push(formatSchemaForDocs(tool.inputSchema));
         lines.push("");
 
-        // Reference to TypeScript interface
-        const interfaceName = tool.name
+        // Reference to TypeScript wrapper function and interfaces
+        const functionName = tool.name
           .split(/[-_]/)
           .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
           .join("");
-        lines.push(`**TypeScript Interface:** \`${interfaceName}Input\``);
+        const fileName = tool.name.split(/[-_]/)[0] +
+          tool.name.split(/[-_]/).slice(1).map(p => p.charAt(0).toUpperCase() + p.slice(1)).join('');
+
+        lines.push(`**TypeScript Wrapper:** \`${functionName}\``);
         lines.push("");
-        lines.push(`**Import:** \`import { ${interfaceName}Input } from "./scripts/${category.directory}/types.js"\``);
+        lines.push(`**Import:** \`import { ${functionName}, ${functionName}Input, ${functionName}Output } from "./scripts/${category.directory}/${fileName}.js"\``);
         lines.push("");
       }
     }
@@ -270,34 +267,39 @@ export function generateSkillMarkdown(
   // Usage Instructions
   lines.push("## Usage");
   lines.push("");
-  lines.push("This skill provides TypeScript interfaces for all MCP tools.");
+  lines.push("This skill provides TypeScript wrapper functions and interfaces for all MCP tools.");
   if (categories && categories.length > 0) {
-    lines.push("Import the interfaces from category-specific directories:");
+    lines.push("Import wrapper functions from category-specific modules:");
     lines.push("");
     lines.push("```typescript");
     lines.push(`// Example: Import from ${categories[0].name}`);
     const exampleTool = categories[0].tools[0];
-    const exampleInterface = exampleTool.name
+    const exampleFunction = exampleTool.name
       .split(/[-_]/)
       .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
       .join("");
-    lines.push(`import { ${exampleInterface}Input } from "./scripts/${categories[0].directory}/types.js";`);
+    const exampleFile = exampleTool.name.split(/[-_]/)[0] +
+      exampleTool.name.split(/[-_]/).slice(1).map(p => p.charAt(0).toUpperCase() + p.slice(1)).join('');
+    lines.push(`import { ${exampleFunction}, ${exampleFunction}Input } from "./scripts/${categories[0].directory}/${exampleFile}.js";`);
     lines.push("");
-    lines.push("// Use the interface for type-safe tool calls");
-    lines.push(`const input: ${exampleInterface}Input = {`);
-    lines.push("  // ... parameters");
-    lines.push("};");
+    lines.push("// Or import from category index");
+    lines.push(`import { ${exampleFunction} } from "./scripts/${categories[0].directory}/index.js";`);
+    lines.push("");
+    lines.push("// Use type-safe wrapper function");
+    lines.push(`const result = await ${exampleFunction}({`);
+    lines.push("  // ... parameters with full type checking");
+    lines.push("});");
     lines.push("```");
   } else {
     lines.push("Import the interfaces from `scripts/types.ts` to use them in your code.");
     lines.push("");
     lines.push("```typescript");
-    lines.push('import { GetWeatherInput } from "./scripts/types.js";');
+    lines.push('import { GetWeather, GetWeatherInput } from "./scripts/getWeather.js";');
     lines.push("");
-    lines.push("// Use the interface for type-safe tool calls");
-    lines.push("const input: GetWeatherInput = {");
+    lines.push("// Use type-safe wrapper function");
+    lines.push("const result = await GetWeather({");
     lines.push('  location: "San Francisco"');
-    lines.push("};");
+    lines.push("});");
     lines.push("```");
   }
   lines.push("");
@@ -316,32 +318,40 @@ export function generateSkillMarkdown(
 export async function createSkillPackage(
   outputDir: string,
   metadata: SkillMetadata,
-  tools: MCPTool[],
-  typesContentMap: Map<string, string> | string
+  categories: ToolCategory[],
+  wrappersMap: Map<string, Map<string, string>>
 ): Promise<void> {
   // Create output directory structure
   await mkdir(outputDir, { recursive: true });
   const scriptsDir = join(outputDir, "scripts");
   await mkdir(scriptsDir, { recursive: true });
 
-  // Categorize tools
-  const categories = categorizeTools(tools);
+  // Get all tools from categories
+  const tools = categories.flatMap(cat => cat.tools);
 
   // Write SKILL.md with categories
   const skillMd = generateSkillMarkdown(metadata, tools, categories);
   await writeFile(join(outputDir, "SKILL.md"), skillMd, "utf-8");
 
-  // Write TypeScript types (either categorized or single file)
-  if (typesContentMap instanceof Map) {
-    // Categorized: write to separate files
-    for (const [categoryDir, content] of typesContentMap.entries()) {
-      const categoryPath = join(scriptsDir, categoryDir);
-      await mkdir(categoryPath, { recursive: true });
-      await writeFile(join(categoryPath, "types.ts"), content, "utf-8");
+  // Write individual wrapper files for each category
+  const { generateCategoryIndex } = await import("./schema-parser.js");
+
+  for (const category of categories) {
+    const categoryPath = join(scriptsDir, category.directory);
+    await mkdir(categoryPath, { recursive: true });
+
+    // Get tool files for this category
+    const toolFiles = wrappersMap.get(category.directory);
+    if (toolFiles) {
+      // Write each tool file
+      for (const [fileName, content] of toolFiles.entries()) {
+        await writeFile(join(categoryPath, `${fileName}.ts`), content, "utf-8");
+      }
+
+      // Write index.ts barrel export
+      const indexContent = generateCategoryIndex(category.tools);
+      await writeFile(join(categoryPath, "index.ts"), indexContent, "utf-8");
     }
-  } else {
-    // Single file: backwards compatible
-    await writeFile(join(scriptsDir, "types.ts"), typesContentMap, "utf-8");
   }
 
   // Create a basic README
@@ -357,8 +367,12 @@ This is an auto-generated Claude Code skill from an MCP server.
 ## Contents
 
 - \`SKILL.md\` - Main skill documentation
-- \`scripts/\` - TypeScript interfaces organized by category
-  ${categories.map(cat => `- \`scripts/${cat.directory}/\` - ${cat.name} (${cat.tools.length} tools)`).join("\n  ")}
+- \`scripts/\` - TypeScript wrapper functions organized by category
+  ${categories.map(cat => `- \`scripts/${cat.directory}/\` - ${cat.name} (${cat.tools.length} wrapper functions)`).join("\n  ")}
+
+Each category contains:
+- Individual \`.ts\` files for each tool with input/output interfaces and wrapper functions
+- \`index.ts\` - Barrel export for easy importing
 
 ## Original MCP Server
 
@@ -369,15 +383,29 @@ This is an auto-generated Claude Code skill from an MCP server.
 ## Tool Categories
 
 ${categories.map(cat => `- **${cat.name}** (${cat.tools.length} tools): ${cat.description}`).join("\n")}
+
+## Usage
+
+Import wrapper functions from category modules:
+
+\`\`\`typescript
+import { CreateWorkspace, UpdateWorkspace } from "./scripts/workspaces/index.js";
+
+// Use type-safe wrapper functions
+const result = await CreateWorkspace({
+  workspace_name: "my-workspace",
+  terraform_org_name: "my-org"
+});
+\`\`\`
 `;
 
   await writeFile(join(outputDir, "README.md"), readme, "utf-8");
 
   console.log(`\nSkill package created at: ${outputDir}`);
   console.log(`- SKILL.md: Main skill documentation`);
-  console.log(`- scripts/: TypeScript interfaces organized by category`);
+  console.log(`- scripts/: TypeScript wrapper functions organized by category`);
   for (const category of categories) {
-    console.log(`  - ${category.directory}/ (${category.tools.length} tools)`);
+    console.log(`  - ${category.directory}/ (${category.tools.length} wrapper functions + index.ts)`);
   }
   console.log(`- README.md: Installation instructions`);
 }
