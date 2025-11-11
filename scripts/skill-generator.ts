@@ -52,7 +52,7 @@ function categorizeTools(tools: MCPTool[]): ToolCategory[] {
       name: "Public Registry",
       directory: "public-registry",
       description: "Tools for accessing public Terraform registry (modules, providers, policies)",
-      patterns: [/^(get_latest|get_module_details|get_policy_details|get_provider_details|get_provider_capabilities|search_modules|search_policies|search_providers)$/],
+      patterns: [/^(get_latest|get_module_details|get_policy_details|get_provider_details|get_provider_capabilities|search_modules|search_policies|search_providers)/],
       exclude: [/private/i]
     },
     {
