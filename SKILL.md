@@ -259,8 +259,44 @@ User: Convert these MCP servers:
 3. @modelcontextprotocol/server-github
 ```
 
+## Features
+
+### Automatic Tool Categorization
+
+Tools are automatically organized into logical categories:
+- **Workspaces** - Workspace creation, configuration, and management
+- **Variables** - Variable and variable set management
+- **Runs** - Terraform run creation and monitoring
+- **Public Registry** - Access to public Terraform registry
+- **Private Registry** - Access to private modules and providers
+- **Organization** - Organization and project listing
+
+### MCP Client Integration
+
+Generated skills include a complete MCP client helper (`client.ts`) with:
+- **Connection management** - `initializeMCPClient()` and `closeMCPClient()`
+- **Type-safe tool calls** - `callMCPTool<TOutput>(toolName, input)`
+- **Error handling** - Proper MCP response parsing and error propagation
+- **Connection state tracking** - Prevents duplicate connections
+
+### TypeScript Type Safety
+
+Every tool gets complete type definitions:
+- **Input interfaces** - Generated from JSON Schema with full JSDoc comments
+- **Output interfaces** - Standard MCP response structure
+- **Wrapper functions** - Type-safe async functions that call the MCP server
+
+### Production-Ready Output
+
+Generated skills follow Anthropic's recommended MCP patterns:
+- Individual files per tool for better code organization
+- Barrel exports (`index.ts`) for convenient importing
+- Working implementations (not placeholders)
+- Complete documentation with usage examples
+
 ## Reference
 
 - **MCP Specification**: https://modelcontextprotocol.io
 - **MCP TypeScript SDK**: https://github.com/modelcontextprotocol/typescript-sdk
 - **Claude Code Skills**: https://docs.claude.com/claude-code/skills
+- **Anthropic MCP Blog**: https://www.anthropic.com/engineering/code-execution-with-mcp
