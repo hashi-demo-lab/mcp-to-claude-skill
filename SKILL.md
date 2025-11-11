@@ -143,9 +143,9 @@ Claude: *Runs:*
   ✓ Generated skill at ./time-skill/ with 2 tools
 ```
 
-## TypeScript Interface Generation
+## Generated Code
 
-The converter generates TypeScript interfaces from JSON Schema definitions:
+The converter generates complete TypeScript wrapper functions from MCP tool definitions:
 
 **MCP Tool Definition:**
 ```json
@@ -169,12 +169,52 @@ The converter generates TypeScript interfaces from JSON Schema definitions:
 }
 ```
 
-**Generated TypeScript Interface:**
+**Generated TypeScript Wrapper (`scripts/weather/getWeather.ts`):**
 ```typescript
+import { callMCPTool } from "../client.js";
+
 export interface GetWeatherInput {
+  /**
+   * City name
+   */
   location: string;
   units?: "celsius" | "fahrenheit";
+  [k: string]: unknown;
 }
+
+export interface GetWeatherOutput {
+  content?: Array<{
+    type: string;
+    text?: string;
+    [key: string]: any;
+  }>;
+  isError?: boolean;
+  [key: string]: any;
+}
+
+/**
+ * Get weather for a location
+ */
+export async function GetWeather(
+  input: GetWeatherInput
+): Promise<GetWeatherOutput> {
+  return await callMCPTool<GetWeatherOutput>('get_weather', input);
+}
+```
+
+**Usage:**
+```typescript
+import { initializeMCPClient } from "./scripts/client.js";
+import { GetWeather } from "./scripts/weather/index.js";
+
+await initializeMCPClient({ command: "...", args: [...] });
+
+const weather = await GetWeather({
+  location: "San Francisco",
+  units: "celsius"
+});
+
+console.log(weather.content[0].text);
 ```
 
 ## Troubleshooting
