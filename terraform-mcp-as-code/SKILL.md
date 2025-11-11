@@ -1,14 +1,28 @@
-# terraform-mcp-as-code
+# Terraform Infrastructure as Code
 
-Terraform infrastructure-as-code management through HashiCorp Cloud Platform (HCP) Terraform.
+Manage HashiCorp Cloud Platform (HCP) Terraform infrastructure through type-safe TypeScript wrappers for Terraform Cloud and Terraform Enterprise.
 
-This skill provides type-safe TypeScript wrappers for all Terraform Cloud/Enterprise operations including workspaces, runs, variables, registry access, and more.
+## Overview
 
-## Server Information
+This skill provides 34 type-safe tools for managing Terraform infrastructure across six categories:
+- **Workspaces** - Create, configure, and manage Terraform workspaces
+- **Runs** - Trigger and monitor Terraform runs
+- **Variables** - Manage workspace variables and variable sets
+- **Public Registry** - Search and access public Terraform modules, providers, and policies
+- **Private Registry** - Access private Terraform modules and providers
+- **Organization** - List organizations and projects
 
-**MCP Server:** HashiCorp Terraform MCP Server
-**Command:** `docker run -i --rm -e TFE_TOKEN=your_token hashicorp/terraform-mcp-server`
-**Total Tools:** 34
+## Prerequisites
+
+**Required:**
+- Terraform Cloud/Enterprise account
+- `TFE_TOKEN` environment variable with a valid Terraform API token
+- Docker (for running the MCP server)
+
+**MCP Server Command:**
+```bash
+docker run -i --rm -e TFE_TOKEN=your_token hashicorp/terraform-mcp-server
+```
 
 ## Quick Start
 
