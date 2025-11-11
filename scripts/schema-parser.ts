@@ -168,6 +168,10 @@ export async function generateToolWrapperFile(tool: MCPTool): Promise<string> {
   lines.push(" */");
   lines.push("");
 
+  // Import callMCPTool
+  lines.push(`import { callMCPTool } from "../client.js";`);
+  lines.push("");
+
   // Generate input interface
   if (tool.inputSchema) {
     const inputCode = await jsonSchemaToTypeScript(tool.inputSchema, inputInterfaceName);
@@ -200,9 +204,7 @@ export async function generateToolWrapperFile(tool: MCPTool): Promise<string> {
   lines.push(`export async function ${functionName}(`);
   lines.push(`  input: ${inputInterfaceName}`);
   lines.push(`): Promise<${outputInterfaceName}> {`);
-  lines.push(`  // This is a placeholder implementation`);
-  lines.push(`  // In a real implementation, this would call the MCP server`);
-  lines.push(`  throw new Error("MCP tool wrapper not yet implemented. Use MCP server directly.");`);
+  lines.push(`  return await callMCPTool<${outputInterfaceName}>('${tool.name}', input);`);
   lines.push(`}`);
   lines.push("");
 

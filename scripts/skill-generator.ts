@@ -47,6 +47,7 @@ function categorizeTools(tools: MCPTool[]): ToolCategory[] {
   const categories = new Map<string, ToolCategory>();
 
   // Define category matchers
+  // Order matters - more specific patterns should come first
   const categoryRules = [
     {
       name: "Public Registry",
@@ -62,17 +63,10 @@ function categorizeTools(tools: MCPTool[]): ToolCategory[] {
       patterns: [/private_(module|provider)/i, /search_private/i, /get_private/i]
     },
     {
-      name: "Workspaces",
-      directory: "workspaces",
-      description: "Workspace creation, configuration, and management",
-      patterns: [/workspace/i, /tag/i],
-      exclude: [/variable/i]
-    },
-    {
       name: "Runs",
       directory: "runs",
       description: "Terraform run creation and monitoring",
-      patterns: [/run/i],
+      patterns: [/^(create_run|list_runs|get_run)/i],
       exclude: [/running/i]
     },
     {
@@ -80,6 +74,13 @@ function categorizeTools(tools: MCPTool[]): ToolCategory[] {
       directory: "variables",
       description: "Variable and variable set management",
       patterns: [/variable/i, /variable_set/i]
+    },
+    {
+      name: "Workspaces",
+      directory: "workspaces",
+      description: "Workspace creation, configuration, and management",
+      patterns: [/workspace/i, /tag/i],
+      exclude: [/variable/i]
     },
     {
       name: "Organization",
@@ -332,6 +333,22 @@ export async function createSkillPackage(
   // Write SKILL.md with categories
   const skillMd = generateSkillMarkdown(metadata, tools, categories);
   await writeFile(join(outputDir, "SKILL.md"), skillMd, "utf-8");
+
+  // Write client.ts helper
+  const { readFile: readFileFS } = await import("fs/promises");
+  const { join: pathJoin } = await import("path");
+  const { fileURLToPath } = await import("url");
+  const { dirname } = await import("path");
+
+  // Get the directory of the current module
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
+  const templatePath = pathJoin(__dirname, "templates", "client.ts.template");
+
+  let clientTemplate = await readFileFS(templatePath, "utf-8");
+  clientTemplate = clientTemplate.replace(/\{\{SKILL_NAME\}\}/g, metadata.name);
+
+  await writeFile(join(scriptsDir, "client.ts"), clientTemplate, "utf-8");
 
   // Write individual wrapper files for each category
   const { generateCategoryIndex } = await import("./schema-parser.js");

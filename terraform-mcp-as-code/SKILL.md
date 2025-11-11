@@ -1,20 +1,74 @@
-# mcp-skill
+# terraform-mcp-as-code
 
-Auto-generated skill from MCP server
+Terraform infrastructure-as-code management through HashiCorp Cloud Platform (HCP) Terraform.
+
+This skill provides type-safe TypeScript wrappers for all Terraform Cloud/Enterprise operations including workspaces, runs, variables, registry access, and more.
 
 ## Server Information
 
-**Command:** `docker run -i --rm -e TFE_TOKEN=***REDACTED*** hashicorp/terraform-mcp-server`
-
+**MCP Server:** HashiCorp Terraform MCP Server
+**Command:** `docker run -i --rm -e TFE_TOKEN=your_token hashicorp/terraform-mcp-server`
 **Total Tools:** 34
+
+## Quick Start
+
+### 1. Initialize the MCP Client
+
+Before using any tools, initialize the MCP client connection:
+
+```typescript
+import { initializeMCPClient } from "./scripts/client.js";
+
+await initializeMCPClient({
+  command: "docker",
+  args: [
+    "run", "-i", "--rm",
+    "-e", `TFE_TOKEN=${process.env.TFE_TOKEN}`,
+    "hashicorp/terraform-mcp-server"
+  ]
+});
+```
+
+### 2. Use Type-Safe Wrappers
+
+Import and call wrapper functions with full type safety:
+
+```typescript
+import { CreateWorkspace } from "./scripts/workspaces/index.js";
+import { CreateRun } from "./scripts/runs/index.js";
+
+// Create a workspace
+const workspace = await CreateWorkspace({
+  workspace_name: "my-infrastructure",
+  terraform_org_name: "my-org",
+  auto_apply: "false"
+});
+
+// Trigger a run
+const run = await CreateRun({
+  workspace_name: "my-infrastructure",
+  terraform_org_name: "my-org",
+  message: "Initial deployment"
+});
+```
+
+### 3. Clean Up
+
+Close the MCP client when done:
+
+```typescript
+import { closeMCPClient } from "./scripts/client.js";
+
+await closeMCPClient();
+```
 
 ## Tool Categories
 
 - **[Variables](#variables)** (11 tools) - Variable and variable set management
-- **[Workspaces](#workspaces)** (7 tools) - Workspace creation, configuration, and management
+- **[Runs](#runs)** (3 tools) - Terraform run creation and monitoring
+- **[Workspaces](#workspaces)** (5 tools) - Workspace creation, configuration, and management
 - **[Public Registry](#public-registry)** (9 tools) - Tools for accessing public Terraform registry (modules, providers, policies)
 - **[Private Registry](#private-registry)** (4 tools) - Tools for accessing private Terraform modules and providers
-- **[Runs](#runs)** (1 tools) - Terraform run creation and monitoring
 - **[Organization](#organization)** (2 tools) - Organization and project listing
 
 ## Variables
@@ -238,11 +292,11 @@ Update an existing variable in a Terraform workspace.
 
 **Import:** `import { UpdateWorkspaceVariable, UpdateWorkspaceVariableInput, UpdateWorkspaceVariableOutput } from "./scripts/variables/updateWorkspaceVariable.js"`
 
-## Workspaces
+## Runs
 
-Workspace creation, configuration, and management
+Terraform run creation and monitoring
 
-**Location:** `scripts/workspaces/`
+**Location:** `scripts/runs/`
 
 ### create_run
 
@@ -261,7 +315,49 @@ Creates a new Terraform run in the specified workspace.
 
 **TypeScript Wrapper:** `CreateRun`
 
-**Import:** `import { CreateRun, CreateRunInput, CreateRunOutput } from "./scripts/workspaces/createRun.js"`
+**Import:** `import { CreateRun, CreateRunInput, CreateRunOutput } from "./scripts/runs/createRun.js"`
+
+### get_run_details
+
+Fetches detailed information about a specific Terraform run.
+
+**Parameters:**
+
+- `run_id`: string (required)
+  The ID of the run to get details for
+
+**TypeScript Wrapper:** `GetRunDetails`
+
+**Import:** `import { GetRunDetails, GetRunDetailsInput, GetRunDetailsOutput } from "./scripts/runs/getRunDetails.js"`
+
+### list_runs
+
+List or search Terraform runs in a specific workspace with optional filtering.
+
+**Parameters:**
+
+- `page`: number (optional)
+  Page number for pagination (min 1)
+- `pageSize`: number (optional)
+  Results per page for pagination (min 1, max 100)
+- `status`: array (optional)
+  Optional run status filter
+- `terraform_org_name`: string (required)
+  Lists the runs in Terraform Cloud/Enterprise organization based on filters if no workspace is specified
+- `vcs_username`: string (optional)
+  Searches for runs that match the VCS username you supply
+- `workspace_name`: string (optional)
+  If specified, lists the runs in the given workspace instead of the organization based on filters
+
+**TypeScript Wrapper:** `ListRuns`
+
+**Import:** `import { ListRuns, ListRunsInput, ListRunsOutput } from "./scripts/runs/listRuns.js"`
+
+## Workspaces
+
+Workspace creation, configuration, and management
+
+**Location:** `scripts/workspaces/`
 
 ### create_workspace
 
@@ -314,29 +410,6 @@ Add tags to a Terraform workspace.
 **TypeScript Wrapper:** `CreateWorkspaceTags`
 
 **Import:** `import { CreateWorkspaceTags, CreateWorkspaceTagsInput, CreateWorkspaceTagsOutput } from "./scripts/workspaces/createWorkspaceTags.js"`
-
-### list_runs
-
-List or search Terraform runs in a specific workspace with optional filtering.
-
-**Parameters:**
-
-- `page`: number (optional)
-  Page number for pagination (min 1)
-- `pageSize`: number (optional)
-  Results per page for pagination (min 1, max 100)
-- `status`: array (optional)
-  Optional run status filter
-- `terraform_org_name`: string (required)
-  Lists the runs in Terraform Cloud/Enterprise organization based on filters if no workspace is specified
-- `vcs_username`: string (optional)
-  Searches for runs that match the VCS username you supply
-- `workspace_name`: string (optional)
-  If specified, lists the runs in the given workspace instead of the organization based on filters
-
-**TypeScript Wrapper:** `ListRuns`
-
-**Import:** `import { ListRuns, ListRunsInput, ListRunsOutput } from "./scripts/workspaces/listRuns.js"`
 
 ### list_workspaces
 
@@ -693,25 +766,6 @@ It retrieves a list of private providers that match the search criteria. This to
 
 **Import:** `import { SearchPrivateProviders, SearchPrivateProvidersInput, SearchPrivateProvidersOutput } from "./scripts/private-registry/searchPrivateProviders.js"`
 
-## Runs
-
-Terraform run creation and monitoring
-
-**Location:** `scripts/runs/`
-
-### get_run_details
-
-Fetches detailed information about a specific Terraform run.
-
-**Parameters:**
-
-- `run_id`: string (required)
-  The ID of the run to get details for
-
-**TypeScript Wrapper:** `GetRunDetails`
-
-**Import:** `import { GetRunDetails, GetRunDetailsInput, GetRunDetailsOutput } from "./scripts/runs/getRunDetails.js"`
-
 ## Organization
 
 Organization and project listing
@@ -753,20 +807,105 @@ Fetches a list of all Terraform projects.
 ## Usage
 
 This skill provides TypeScript wrapper functions and interfaces for all MCP tools.
-Import wrapper functions from category-specific modules:
+
+### Complete Example
 
 ```typescript
-// Example: Import from Variables
-import { AttachVariableSetToWorkspaces, AttachVariableSetToWorkspacesInput } from "./scripts/variables/attachVariableSetToWorkspaces.js";
+import { initializeMCPClient, closeMCPClient } from "./scripts/client.js";
+import { CreateWorkspace, ListWorkspaces } from "./scripts/workspaces/index.js";
+import { CreateVariableSet, CreateVariableInVariableSet } from "./scripts/variables/index.js";
+import { GetLatestModuleVersion } from "./scripts/public-registry/index.js";
 
-// Or import from category index
-import { AttachVariableSetToWorkspaces } from "./scripts/variables/index.js";
+async function main() {
+  // 1. Initialize MCP client
+  await initializeMCPClient({
+    command: "docker",
+    args: [
+      "run", "-i", "--rm",
+      "-e", `TFE_TOKEN=${process.env.TFE_TOKEN}`,
+      "hashicorp/terraform-mcp-server"
+    ]
+  });
 
-// Use type-safe wrapper function
-const result = await AttachVariableSetToWorkspaces({
-  // ... parameters with full type checking
-});
+  try {
+    // 2. List existing workspaces
+    const workspaces = await ListWorkspaces({
+      terraform_org_name: "my-org"
+    });
+
+    // 3. Get latest module version from registry
+    const moduleVersion = await GetLatestModuleVersion({
+      module_publisher: "terraform-aws-modules",
+      module_name: "vpc",
+      module_provider: "aws"
+    });
+
+    // 4. Create a new workspace
+    const workspace = await CreateWorkspace({
+      workspace_name: "production-vpc",
+      terraform_org_name: "my-org",
+      description: `Using VPC module ${moduleVersion.content[0].text}`,
+      auto_apply: "false"
+    });
+
+    // 5. Create variable set
+    const varSet = await CreateVariableSet({
+      terraform_org_name: "my-org",
+      name: "aws-credentials",
+      description: "AWS credentials for production"
+    });
+
+  } finally {
+    // 6. Clean up
+    await closeMCPClient();
+  }
+}
+
+main().catch(console.error);
 ```
+
+### Importing Tools
+
+You can import from individual tool files or category indexes:
+
+```typescript
+// Import specific tool with types
+import { CreateWorkspace, CreateWorkspaceInput, CreateWorkspaceOutput }
+  from "./scripts/workspaces/createWorkspace.js";
+
+// Or import multiple tools from category index
+import { CreateWorkspace, UpdateWorkspace, ListWorkspaces }
+  from "./scripts/workspaces/index.js";
+```
+
+### Error Handling
+
+All wrapper functions return MCP responses. Handle errors appropriately:
+
+```typescript
+try {
+  const result = await CreateWorkspace({
+    workspace_name: "my-workspace",
+    terraform_org_name: "my-org"
+  });
+
+  if (result.isError) {
+    console.error("Workspace creation failed:", result.content);
+  } else {
+    console.log("Workspace created successfully");
+  }
+} catch (error) {
+  console.error("MCP call failed:", error);
+}
+```
+
+## Architecture
+
+- **`scripts/client.ts`** - MCP client helper with connection management
+- **`scripts/{category}/`** - Category-organized wrapper functions
+  - Each tool has its own `.ts` file with Input/Output interfaces and wrapper function
+  - `index.ts` provides barrel exports for convenient importing
+- **TypeScript types** - Full type safety from JSON Schema definitions
 
 ---
 

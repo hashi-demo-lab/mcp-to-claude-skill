@@ -12,10 +12,10 @@ This is an auto-generated Claude Code skill from an MCP server.
 - `SKILL.md` - Main skill documentation
 - `scripts/` - TypeScript wrapper functions organized by category
   - `scripts/variables/` - Variables (11 wrapper functions)
-  - `scripts/workspaces/` - Workspaces (7 wrapper functions)
+  - `scripts/runs/` - Runs (3 wrapper functions)
+  - `scripts/workspaces/` - Workspaces (5 wrapper functions)
   - `scripts/public-registry/` - Public Registry (9 wrapper functions)
   - `scripts/private-registry/` - Private Registry (4 wrapper functions)
-  - `scripts/runs/` - Runs (1 wrapper functions)
   - `scripts/organization/` - Organization (2 wrapper functions)
 
 Each category contains:
@@ -31,10 +31,10 @@ Each category contains:
 ## Tool Categories
 
 - **Variables** (11 tools): Variable and variable set management
-- **Workspaces** (7 tools): Workspace creation, configuration, and management
+- **Runs** (3 tools): Terraform run creation and monitoring
+- **Workspaces** (5 tools): Workspace creation, configuration, and management
 - **Public Registry** (9 tools): Tools for accessing public Terraform registry (modules, providers, policies)
 - **Private Registry** (4 tools): Tools for accessing private Terraform modules and providers
-- **Runs** (1 tools): Terraform run creation and monitoring
 - **Organization** (2 tools): Organization and project listing
 
 ## Usage
