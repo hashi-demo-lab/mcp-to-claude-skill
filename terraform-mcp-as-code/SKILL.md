@@ -1,6 +1,6 @@
 ---
 name: Terraform Infrastructure as Code
-description: Manage HCP Terraform Cloud/Enterprise infrastructure with type-safe tools for workspaces, runs, variables, and public/private registry access.
+description: Automate Terraform Cloud/Enterprise operations: create workspaces, trigger runs, manage variables, and search registries for infrastructure-as-code projects.
 version: 1.0.0
 dependencies: docker, node.js
 ---
@@ -18,6 +18,18 @@ This skill provides 34 type-safe tools for managing Terraform infrastructure acr
 - **Public Registry** - Search and access public Terraform modules, providers, and policies
 - **Private Registry** - Access private Terraform modules and providers
 - **Organization** - List organizations and projects
+
+## When to Use This Skill
+
+Invoke this skill when you need to:
+- **Create, configure, or update** Terraform Cloud/Enterprise workspaces
+- **Trigger and monitor** Terraform runs programmatically
+- **Manage** workspace variables and variable sets
+- **Search** for public Terraform modules, providers, or policies
+- **Access** private registry modules and providers
+- **List** organizations and projects in your Terraform Cloud/Enterprise account
+
+This skill is ideal for infrastructure-as-code automation, and programmatic HCP Terraform management workflows.
 
 ## Prerequisites
 
@@ -868,6 +880,98 @@ async function main() {
 }
 
 main().catch(console.error);
+```
+
+### Common Workflows
+
+#### Workflow 1: Create Infrastructure Workspace
+
+```typescript
+// Use case: Setting up a new production environment for an API service
+import { CreateWorkspace } from "./scripts/workspaces/index.js";
+
+const workspace = await CreateWorkspace({
+  workspace_name: "production-api",
+  terraform_org_name: "acme-corp",
+  description: "Production API infrastructure",
+  auto_apply: "false",           // Require manual approval for production
+  execution_mode: "remote",
+  terraform_version: "1.6.0",
+  tags: "production,api,critical"
+});
+```
+
+#### Workflow 2: Find and Use Registry Module
+
+```typescript
+// Use case: Discovering the right VPC module for AWS infrastructure
+import { SearchModules, GetModuleDetails } from "./scripts/public-registry/index.js";
+
+// 1. Search for VPC modules
+const modules = await SearchModules({
+  module_query: "vpc aws terraform-aws-modules"
+});
+
+// 2. Get detailed documentation for the best match
+const moduleDetails = await GetModuleDetails({
+  module_id: "terraform-aws-modules/vpc/aws/5.1.2"
+});
+
+// The module details include inputs, outputs, and usage examples
+console.log(moduleDetails.content[0].text);
+```
+
+#### Workflow 3: Configure Workspace Variables
+
+```typescript
+// Use case: Setting up environment-specific configuration
+import { CreateVariableSet, CreateVariableInVariableSet, AttachVariableSetToWorkspaces } from "./scripts/variables/index.js";
+
+// 1. Create a variable set for AWS credentials
+const varSet = await CreateVariableSet({
+  terraform_org_name: "acme-corp",
+  name: "aws-production-credentials",
+  description: "AWS credentials for production workspaces",
+  global: false  // Not global - attach to specific workspaces
+});
+
+// 2. Add variables to the set
+await CreateVariableInVariableSet({
+  variable_set_id: varSet.id,
+  key: "AWS_REGION",
+  value: "us-east-1",
+  category: "env",
+  sensitive: false
+});
+
+// 3. Attach to workspaces
+await AttachVariableSetToWorkspaces({
+  variable_set_id: varSet.id,
+  workspace_ids: "ws-123,ws-456,ws-789"  // Multiple workspace IDs
+});
+```
+
+#### Workflow 4: Trigger and Monitor Runs
+
+```typescript
+// Use case: Deploying infrastructure changes with monitoring
+import { CreateRun, GetRunDetails } from "./scripts/runs/index.js";
+
+// 1. Trigger a run
+const run = await CreateRun({
+  workspace_name: "production-api",
+  terraform_org_name: "acme-corp",
+  message: "Deploy v2.1.0 API changes",
+  run_type: "plan-and-apply"
+});
+
+// 2. Monitor run status
+const runDetails = await GetRunDetails({
+  run_id: run.id
+});
+
+console.log(`Run status: ${runDetails.status}`);
+console.log(`Plan output: ${runDetails.content[0].text}`);
 ```
 
 ### Importing Tools

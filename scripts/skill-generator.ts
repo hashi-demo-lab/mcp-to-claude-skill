@@ -203,10 +203,39 @@ export function generateSkillMarkdown(
   lines.push(metadata.description);
   lines.push("");
 
-  // Server Information
-  lines.push("## Server Information");
+  // Overview section with categories
+  if (categories && categories.length > 0) {
+    lines.push("## Overview");
+    lines.push("");
+    lines.push(`This skill provides ${tools.length} type-safe tools for managing infrastructure across ${categories.length} categories:`);
+    for (const category of categories) {
+      lines.push(`- **${category.name}** - ${category.description}`);
+    }
+    lines.push("");
+  }
+
+  // When to Use This Skill section
+  lines.push("## When to Use This Skill");
   lines.push("");
-  lines.push(`**Command:** \`${formatCommandForDocs(metadata.serverCommand, metadata.serverArgs)}\``);
+  lines.push("Invoke this skill when you need to:");
+  if (categories && categories.length > 0) {
+    for (const category of categories) {
+      // Generate use case bullets from category descriptions
+      const useCase = category.description.charAt(0).toUpperCase() + category.description.slice(1);
+      lines.push(`- **${useCase}**`);
+    }
+  } else {
+    lines.push("- Perform operations provided by this MCP server");
+  }
+  lines.push("");
+
+  // Server Information
+  lines.push("## Prerequisites");
+  lines.push("");
+  lines.push("**MCP Server Command:**");
+  lines.push("```bash");
+  lines.push(`${formatCommandForDocs(metadata.serverCommand, metadata.serverArgs)}`);
+  lines.push("```");
   lines.push("");
   lines.push(`**Total Tools:** ${tools.length}`);
   lines.push("");
