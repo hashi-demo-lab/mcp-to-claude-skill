@@ -175,6 +175,28 @@ export function generateSkillMarkdown(
 ): string {
   const lines: string[] = [];
 
+  // YAML Frontmatter (required by Claude Skill specification)
+  const truncatedDescription = metadata.description.length > 200
+    ? metadata.description.substring(0, 197) + "..."
+    : metadata.description;
+
+  lines.push("---");
+  lines.push(`name: ${metadata.name}`);
+  lines.push(`description: ${truncatedDescription}`);
+  lines.push("version: 1.0.0");
+
+  // Extract dependencies from server command
+  const dependencies: string[] = [];
+  if (metadata.serverCommand.includes("docker")) dependencies.push("docker");
+  if (metadata.serverCommand.includes("node") || metadata.serverCommand.includes("npx")) dependencies.push("node.js");
+  if (metadata.serverCommand.includes("python") || metadata.serverCommand.includes("uvx")) dependencies.push("python");
+  if (dependencies.length > 0) {
+    lines.push(`dependencies: ${dependencies.join(", ")}`);
+  }
+
+  lines.push("---");
+  lines.push("");
+
   // Header
   lines.push(`# ${metadata.name}`);
   lines.push("");

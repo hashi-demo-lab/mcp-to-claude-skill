@@ -1,3 +1,10 @@
+---
+name: Terraform Infrastructure as Code
+description: Manage HCP Terraform Cloud/Enterprise infrastructure with type-safe tools for workspaces, runs, variables, and public/private registry access.
+version: 1.0.0
+dependencies: docker, node.js
+---
+
 # Terraform Infrastructure as Code
 
 Manage HashiCorp Cloud Platform (HCP) Terraform infrastructure through type-safe TypeScript wrappers for Terraform Cloud and Terraform Enterprise.
@@ -63,9 +70,9 @@ try {
 
 ## Tool Categories
 
-- **[Variables](#variables)** (11 tools) - Variable and variable set management
+- **[Variables](#variables)** (9 tools) - Variable and variable set management
 - **[Runs](#runs)** (3 tools) - Terraform run creation and monitoring
-- **[Workspaces](#workspaces)** (5 tools) - Workspace creation, configuration, and management
+- **[Workspaces](#workspaces)** (7 tools) - Workspace creation, configuration, and management
 - **[Public Registry](#public-registry)** (9 tools) - Tools for accessing public Terraform registry (modules, providers, policies)
 - **[Private Registry](#private-registry)** (4 tools) - Tools for accessing private Terraform modules and providers
 - **[Organization](#organization)** (2 tools) - Organization and project listing
@@ -90,25 +97,6 @@ Attach a variable set to one or more workspaces.
 **TypeScript Wrapper:** `AttachVariableSetToWorkspaces`
 
 **Import:** `import { AttachVariableSetToWorkspaces, AttachVariableSetToWorkspacesInput, AttachVariableSetToWorkspacesOutput } from "./scripts/variables/attachVariableSetToWorkspaces.js"`
-
-### create_no_code_workspace
-
-Creates a new Terraform No Code module workspace. The tool uses the MCP elicitation feature to automatically discover and collect required variables from the user.
-
-**Parameters:**
-
-- `auto_apply`: boolean (optional)
-  Whether to automatically apply changes in the workspace: 'true' or 'false'
-- `no_code_module_id`: string (required)
-  The ID of the No Code module to create a workspace for
-- `project_id`: string (required)
-  The ID of the project to use
-- `workspace_name`: string (required)
-  The name of the workspace to create
-
-**TypeScript Wrapper:** `CreateNoCodeWorkspace`
-
-**Import:** `import { CreateNoCodeWorkspace, CreateNoCodeWorkspaceInput, CreateNoCodeWorkspaceOutput } from "./scripts/variables/createNoCodeWorkspace.js"`
 
 ### create_variable_in_variable_set
 
@@ -210,21 +198,6 @@ Detach a variable set from one or more workspaces.
 **TypeScript Wrapper:** `DetachVariableSetFromWorkspaces`
 
 **Import:** `import { DetachVariableSetFromWorkspaces, DetachVariableSetFromWorkspacesInput, DetachVariableSetFromWorkspacesOutput } from "./scripts/variables/detachVariableSetFromWorkspaces.js"`
-
-### get_workspace_details
-
-Fetches detailed information about a specific Terraform workspace, including configuration, variables, and current state information.
-
-**Parameters:**
-
-- `terraform_org_name`: string (required)
-  The Terraform Cloud/Enterprise organization name
-- `workspace_name`: string (required)
-  The name of the workspace to get details for
-
-**TypeScript Wrapper:** `GetWorkspaceDetails`
-
-**Import:** `import { GetWorkspaceDetails, GetWorkspaceDetailsInput, GetWorkspaceDetailsOutput } from "./scripts/variables/getWorkspaceDetails.js"`
 
 ### list_variable_sets
 
@@ -393,6 +366,25 @@ Creates a new Terraform workspace in the specified organization. This is a destr
 
 **Import:** `import { CreateWorkspace, CreateWorkspaceInput, CreateWorkspaceOutput } from "./scripts/workspaces/createWorkspace.js"`
 
+### create_no_code_workspace
+
+Creates a new Terraform No Code module workspace. The tool uses the MCP elicitation feature to automatically discover and collect required variables from the user.
+
+**Parameters:**
+
+- `auto_apply`: boolean (optional)
+  Whether to automatically apply changes in the workspace: 'true' or 'false'
+- `no_code_module_id`: string (required)
+  The ID of the No Code module to create a workspace for
+- `project_id`: string (required)
+  The ID of the project to use
+- `workspace_name`: string (required)
+  The name of the workspace to create
+
+**TypeScript Wrapper:** `CreateNoCodeWorkspace`
+
+**Import:** `import { CreateNoCodeWorkspace, CreateNoCodeWorkspaceInput, CreateNoCodeWorkspaceOutput } from "./scripts/workspaces/createNoCodeWorkspace.js"`
+
 ### create_workspace_tags
 
 Add tags to a Terraform workspace.
@@ -409,6 +401,21 @@ Add tags to a Terraform workspace.
 **TypeScript Wrapper:** `CreateWorkspaceTags`
 
 **Import:** `import { CreateWorkspaceTags, CreateWorkspaceTagsInput, CreateWorkspaceTagsOutput } from "./scripts/workspaces/createWorkspaceTags.js"`
+
+### get_workspace_details
+
+Fetches detailed information about a specific Terraform workspace, including configuration, variables, and current state information.
+
+**Parameters:**
+
+- `terraform_org_name`: string (required)
+  The Terraform Cloud/Enterprise organization name
+- `workspace_name`: string (required)
+  The name of the workspace to get details for
+
+**TypeScript Wrapper:** `GetWorkspaceDetails`
+
+**Import:** `import { GetWorkspaceDetails, GetWorkspaceDetailsInput, GetWorkspaceDetailsOutput } from "./scripts/workspaces/getWorkspaceDetails.js"`
 
 ### list_workspaces
 

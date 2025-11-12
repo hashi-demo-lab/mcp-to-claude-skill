@@ -8,7 +8,8 @@
       "Bash(npm run build:*)",
       "Bash(printenv:*)",
       "WebFetch(domain:www.anthropic.com)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "WebFetch(domain:support.claude.com)"
     ],
     "deny": [],
     "ask": []
