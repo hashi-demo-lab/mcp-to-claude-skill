@@ -166,7 +166,8 @@ function formatSchemaForDocs(schema: any): string {
 }
 
 /**
- * Generate the SKILL.md content for a generated skill with categorized tools
+ * Generate concise SKILL.md focusing on when/how to use (not detailed API reference)
+ * The TypeScript code serves as the detailed reference documentation
  */
 export function generateSkillMarkdown(
   metadata: SkillMetadata,
@@ -203,24 +204,12 @@ export function generateSkillMarkdown(
   lines.push(metadata.description);
   lines.push("");
 
-  // Overview section with categories
-  if (categories && categories.length > 0) {
-    lines.push("## Overview");
-    lines.push("");
-    lines.push(`This skill provides ${tools.length} type-safe tools for managing infrastructure across ${categories.length} categories:`);
-    for (const category of categories) {
-      lines.push(`- **${category.name}** - ${category.description}`);
-    }
-    lines.push("");
-  }
-
   // When to Use This Skill section
   lines.push("## When to Use This Skill");
   lines.push("");
   lines.push("Invoke this skill when you need to:");
   if (categories && categories.length > 0) {
     for (const category of categories) {
-      // Generate use case bullets from category descriptions
       const useCase = category.description.charAt(0).toUpperCase() + category.description.slice(1);
       lines.push(`- **${useCase}**`);
     }
@@ -229,7 +218,7 @@ export function generateSkillMarkdown(
   }
   lines.push("");
 
-  // Server Information
+  // Prerequisites
   lines.push("## Prerequisites");
   lines.push("");
   lines.push("**MCP Server Command:**");
@@ -237,123 +226,137 @@ export function generateSkillMarkdown(
   lines.push(`${formatCommandForDocs(metadata.serverCommand, metadata.serverArgs)}`);
   lines.push("```");
   lines.push("");
-  lines.push(`**Total Tools:** ${tools.length}`);
-  lines.push("");
 
-  // If categories provided, organize by category
-  if (categories && categories.length > 0) {
-    // Table of contents
-    lines.push("## Tool Categories");
+  // Security Best Practices (if applicable - can detect auth/token patterns)
+  const hasAuthRequirement = metadata.serverArgs.some(arg =>
+    /token|secret|key|password|auth/i.test(arg)
+  );
+
+  if (hasAuthRequirement) {
+    lines.push("## Security Best Practices");
     lines.push("");
-    for (const category of categories) {
-      lines.push(`- **[${category.name}](#${category.name.toLowerCase().replace(/\s+/g, "-")})** (${category.tools.length} tools) - ${category.description}`);
-    }
+    lines.push("⚠️ **Important Security Guidelines:**");
     lines.push("");
-
-    // Tools organized by category
-    for (const category of categories) {
-      lines.push(`## ${category.name}`);
-      lines.push("");
-      lines.push(category.description);
-      lines.push("");
-      lines.push(`**Location:** \`scripts/${category.directory}/\``);
-      lines.push("");
-
-      for (const tool of category.tools) {
-        lines.push(`### ${tool.name}`);
-        lines.push("");
-
-        if (tool.description) {
-          lines.push(tool.description);
-          lines.push("");
-        }
-
-        lines.push("**Parameters:**");
-        lines.push("");
-        lines.push(formatSchemaForDocs(tool.inputSchema));
-        lines.push("");
-
-        // Reference to TypeScript wrapper function and interfaces
-        const functionName = tool.name
-          .split(/[-_]/)
-          .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-          .join("");
-        const fileName = tool.name.split(/[-_]/)[0] +
-          tool.name.split(/[-_]/).slice(1).map(p => p.charAt(0).toUpperCase() + p.slice(1)).join('');
-
-        lines.push(`**TypeScript Wrapper:** \`${functionName}\``);
-        lines.push("");
-        lines.push(`**Import:** \`import { ${functionName}, ${functionName}Input, ${functionName}Output } from "./scripts/${category.directory}/${fileName}.js"\``);
-        lines.push("");
-      }
-    }
-  } else {
-    // Flat list of tools (backwards compatible)
-    lines.push("## Available Tools");
+    lines.push("- **Never hardcode credentials**: Always use environment variables");
+    lines.push("- **Token security**: Store tokens in secure credential managers");
+    lines.push("- **Least privilege**: Use minimal permissions necessary");
+    lines.push("- **Review before execution**: Examine generated code before running in production");
+    lines.push("- **No secrets in code**: Never commit credentials to version control");
     lines.push("");
-
-    for (const tool of tools) {
-      lines.push(`### ${tool.name}`);
-      lines.push("");
-
-      if (tool.description) {
-        lines.push(tool.description);
-        lines.push("");
-      }
-
-      lines.push("**Parameters:**");
-      lines.push("");
-      lines.push(formatSchemaForDocs(tool.inputSchema));
-      lines.push("");
-
-      // Reference to TypeScript interface
-      const interfaceName = tool.name
-        .split(/[-_]/)
-        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-        .join("");
-      lines.push(`**TypeScript Interface:** \`${interfaceName}Input\``);
-      lines.push("");
-    }
   }
 
-  // Usage Instructions
-  lines.push("## Usage");
+  // Available Tools (concise category summary)
+  lines.push("## Available Tools");
   lines.push("");
-  lines.push("This skill provides TypeScript wrapper functions and interfaces for all MCP tools.");
+  lines.push(`This skill provides ${tools.length} type-safe tools organized into ${categories?.length || 1} ${categories?.length === 1 ? 'category' : 'categories'}:`);
+  lines.push("");
+
   if (categories && categories.length > 0) {
-    lines.push("Import wrapper functions from category-specific modules:");
+    for (const category of categories) {
+      lines.push(`- **${category.name}** (${category.tools.length} tools) - \`scripts/${category.directory}/\``);
+      // Add brief bullet points about capabilities
+      const sampleTools = category.tools.slice(0, 3).map(t => t.name.split(/[-_]/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')).join(', ');
+      lines.push(`  ${category.description}`);
+    }
     lines.push("");
-    lines.push("```typescript");
-    lines.push(`// Example: Import from ${categories[0].name}`);
+    lines.push("**For detailed parameters and types**, see the TypeScript files in each category directory. All functions include full type definitions and JSDoc comments for IDE autocomplete.");
+  } else {
+    lines.push("See `scripts/` directory for all available tools.");
+  }
+  lines.push("");
+
+  // Quick Start Example
+  lines.push("## Quick Start");
+  lines.push("");
+  lines.push("```typescript");
+  lines.push('import { initializeMCPClient, closeMCPClient } from "./scripts/client.js";');
+
+  if (categories && categories.length > 0 && categories[0].tools.length > 0) {
     const exampleTool = categories[0].tools[0];
     const exampleFunction = exampleTool.name
       .split(/[-_]/)
       .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
       .join("");
-    const exampleFile = exampleTool.name.split(/[-_]/)[0] +
-      exampleTool.name.split(/[-_]/).slice(1).map(p => p.charAt(0).toUpperCase() + p.slice(1)).join('');
-    lines.push(`import { ${exampleFunction}, ${exampleFunction}Input } from "./scripts/${categories[0].directory}/${exampleFile}.js";`);
-    lines.push("");
-    lines.push("// Or import from category index");
     lines.push(`import { ${exampleFunction} } from "./scripts/${categories[0].directory}/index.js";`);
-    lines.push("");
-    lines.push("// Use type-safe wrapper function");
-    lines.push(`const result = await ${exampleFunction}({`);
-    lines.push("  // ... parameters with full type checking");
-    lines.push("});");
-    lines.push("```");
-  } else {
-    lines.push("Import the interfaces from `scripts/types.ts` to use them in your code.");
-    lines.push("");
-    lines.push("```typescript");
-    lines.push('import { GetWeather, GetWeatherInput } from "./scripts/getWeather.js";');
-    lines.push("");
-    lines.push("// Use type-safe wrapper function");
-    lines.push("const result = await GetWeather({");
-    lines.push('  location: "San Francisco"');
-    lines.push("});");
-    lines.push("```");
   }
+
+  lines.push("");
+  lines.push("// 1. Initialize connection");
+  lines.push("await initializeMCPClient({");
+  lines.push(`  command: "${metadata.serverCommand}",`);
+  lines.push(`  args: [${metadata.serverArgs.slice(0, 3).map(arg => `"${maskSensitiveArgs([arg])[0]}"`).join(", ")}]`);
+  lines.push("});");
+  lines.push("");
+  lines.push("try {");
+  lines.push("  // 2. Use skill tools");
+  lines.push("  // ... your code here");
+  lines.push("} finally {");
+  lines.push("  // 3. Clean up");
+  lines.push("  await closeMCPClient();");
+  lines.push("}");
+  lines.push("```");
+  lines.push("");
+
+  // Using the TypeScript Wrappers
+  lines.push("## Using the TypeScript Wrappers");
+  lines.push("");
+  lines.push("Import from category indexes or individual files:");
+  lines.push("");
+  lines.push("```typescript");
+  if (categories && categories.length > 0) {
+    lines.push("// Import from category index");
+    lines.push(`import { Function1, Function2 } from "./scripts/${categories[0].directory}/index.js";`);
+    lines.push("");
+    lines.push("// Or import specific tool with types");
+    lines.push(`import { Function1, Function1Input, Function1Output } from "./scripts/${categories[0].directory}/function1.js";`);
+  } else {
+    lines.push("import { MyTool } from \"./scripts/myTool.js\";");
+  }
+  lines.push("```");
+  lines.push("");
+  lines.push("All wrapper functions are fully typed with Input/Output interfaces. Use your IDE's autocomplete to discover parameters and see JSDoc documentation.");
+  lines.push("");
+
+  // Error Handling
+  lines.push("## Error Handling");
+  lines.push("");
+  lines.push("```typescript");
+  lines.push("try {");
+  lines.push("  const result = await SomeTool({ /* params */ });");
+  lines.push("");
+  lines.push("  if (result.isError) {");
+  lines.push('    console.error("Operation failed:", result.content);');
+  lines.push("  } else {");
+  lines.push('    console.log("Success");');
+  lines.push("  }");
+  lines.push("} catch (error) {");
+  lines.push('  console.error("MCP call failed:", error);');
+  lines.push("}");
+  lines.push("```");
+  lines.push("");
+
+  // Testing
+  lines.push("## Testing This Skill");
+  lines.push("");
+  lines.push("**Before Using:**");
+  lines.push("1. Verify prerequisites are installed");
+  lines.push("2. Test MCP server connectivity");
+  lines.push("3. Try a simple operation to confirm authentication");
+  lines.push("");
+  lines.push("**Troubleshooting:**");
+  lines.push("- **Connection errors**: Verify server is reachable and command is correct");
+  lines.push("- **Authentication failures**: Check credentials have correct permissions");
+  lines.push("- **Type errors**: Ensure you're using the correct Input interface");
+  lines.push("");
+
+  // Architecture
+  lines.push("## Architecture");
+  lines.push("");
+  lines.push("- **`scripts/client.ts`** - MCP connection manager (`initializeMCPClient`, `callMCPTool`, `closeMCPClient`)");
+  lines.push("- **`scripts/{category}/`** - Type-safe wrapper functions organized by category");
+  lines.push("  - Each tool has its own `.ts` file with Input/Output interfaces");
+  lines.push("  - `index.ts` provides barrel exports for convenient importing");
+  lines.push("- **Full type safety** - All interfaces generated from JSON Schema definitions");
   lines.push("");
 
   // Footer
