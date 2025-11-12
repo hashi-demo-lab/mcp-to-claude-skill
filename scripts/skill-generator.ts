@@ -70,17 +70,17 @@ function categorizeTools(tools: MCPTool[]): ToolCategory[] {
       exclude: [/running/i]
     },
     {
-      name: "Variables",
-      directory: "variables",
-      description: "Variable and variable set management",
-      patterns: [/variable/i, /variable_set/i]
-    },
-    {
       name: "Workspaces",
       directory: "workspaces",
       description: "Workspace creation, configuration, and management",
       patterns: [/workspace/i, /tag/i],
-      exclude: [/variable/i]
+      exclude: [/workspace_variable/i, /variable_set.*workspace/i, /workspace.*variable_set/i]
+    },
+    {
+      name: "Variables",
+      directory: "variables",
+      description: "Variable and variable set management",
+      patterns: [/workspace_variable/i, /variable_set/i, /^(create|update|delete|list)_variable/i]
     },
     {
       name: "Organization",

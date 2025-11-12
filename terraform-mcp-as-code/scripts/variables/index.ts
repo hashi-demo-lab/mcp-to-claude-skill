@@ -4,13 +4,11 @@
  */
 
 export * from "./attachVariableSetToWorkspaces.js";
-export * from "./createNoCodeWorkspace.js";
 export * from "./createVariableInVariableSet.js";
 export * from "./createVariableSet.js";
 export * from "./createWorkspaceVariable.js";
 export * from "./deleteVariableInVariableSet.js";
 export * from "./detachVariableSetFromWorkspaces.js";
-export * from "./getWorkspaceDetails.js";
 export * from "./listVariableSets.js";
 export * from "./listWorkspaceVariables.js";
 export * from "./updateWorkspaceVariable.js";
